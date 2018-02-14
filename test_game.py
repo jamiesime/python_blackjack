@@ -11,6 +11,11 @@ class TestGame(unittest.TestCase):
 		self.game.newDeck()
 		self.assertTrue(len(self.game.deck.wholeDeck) == 52)
 
+	def testShuffleDeck(self):
+		self.game.newDeck()
+		self.game.shuffleDeck(self.game.deck)
+		self.assertFalse(self.game.deck.wholeDeck[0].value == "Ace")
+
 
 def main():
 	unittest.main()
