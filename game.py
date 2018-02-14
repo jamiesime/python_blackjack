@@ -55,16 +55,34 @@ class Game:
 		player.cards.append(nextCard)
 		print(player.name + " drew a " + str(nextCard.value) + " of " + nextCard.suit)
 
+	def checkForBust(self, player):
+		handTotal = 0
+		for card in player.cards:
+				# casts card value to list to allow access of index 0
+				# the list will only have one entry
+				cardVal = list(card.value.values())
+				handTotal += int(cardVal[0])
+		print("Hand value: " + str(handTotal))
+		if handTotal > 21:
+			return True
+		return False
 
-	def currentTurnInfo(self, currentPlayer):
+	def currentTurn(self, currentPlayer):
 		thisPlayer = self.players[currentPlayer]
 		print("<>------------- " + thisPlayer.name + "'s turn! --------------<>")
 		print("Your hand is: ")
 		for card in thisPlayer.cards:
-			print(str(card.value) + " of " + card.suit)
+			cardName = list(card.value.keys())
+			print(str(cardName[0]) + " of " + card.suit)
+		bust = self.checkForBust(thisPlayer)
+		if bust == True:
+			print("You've gone bust! You're out!")
+			self.players.pop(currentPlayer)
+		else:
+			self.turnOptions(currentPlayer)
 
 
-	def currentTurnOptions(self, currentPlayer):
+	def turnOptions(self, currentPlayer):
 		thisPlayer = self.players[currentPlayer]
 		print("Press 1 to Stand")
 		print("Press 2 to Hit")
@@ -75,14 +93,14 @@ class Game:
 			elif choice == 2:
 				print(thisPlayer.name + " takes another card!")
 				self.playerHit(thisPlayer)
-				self.currentTurnInfo(currentPlayer)
-				self.currentTurnOptions(currentPlayer)
+				self.currentTurn(currentPlayer)
+				self.turnOptions(currentPlayer)
 			else:
 				print("That's not an option!")
-				self.currentTurnOptions(currentPlayer)
+				self.turnOptions(currentPlayer)
 		except ValueError:
 			print("That's not an option!")
-			self.currentTurnOptions(currentPlayer)
+			self.turnOptions(currentPlayer)
 
 
 	
@@ -99,8 +117,7 @@ currentPlayer = 0
 
 # GAME LOOPS UNTIL END STATE
 while (gameOver == False):
-	thisGame.currentTurnInfo(currentPlayer)
-	thisGame.currentTurnOptions(currentPlayer)
+	thisGame.currentTurn(currentPlayer)
 	if(currentPlayer < len(thisGame.players) - 1):
 		currentPlayer += 1
 	else:

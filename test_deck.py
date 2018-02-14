@@ -12,6 +12,11 @@ class TestDeck(unittest.TestCase):
 	def testDeckLength(self):
 		self.assertTrue(self.deck.getDeckLength() == 52)
 
+	def testValueDict(self):
+		for card in self.deck.wholeDeck:
+			print(card.value.keys())
+			print(card.value.values())
+
 
 def main():
 	unittest.main()

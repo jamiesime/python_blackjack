@@ -13,19 +13,21 @@ class Card:
 
 class Deck:
 
+	# cardvalues = {"Ace" : 11, "1" : 1, "2" : 2, "3" : 3, "4" : 4, "5" : 5, "6" : 6, "7" : 7, "8" : 8, "9" : 9, "10" : 10, "King" : 10, "Queen" : 10, "Jack" : 10}
 
 	# on init, add 52 Cards to wholeDeck looping through each suit, and each value
 	def createNewDeck(self, suits, values):
 		thisDeck = []
 		for suit in suits:
-			for value in values:
-				thisDeck.append(Card(suit, value))
+			for valStr, valInt in values.items():
+				thisDeck.append(Card(suit, {valStr : valInt}))
 		return thisDeck
 					
 
 	def __init__(self):
 		self.suits = ["Hearts", "Spades", "Clubs", "Diamonds"]
-		self.values = ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King"]
+		# self.values = {"Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King"]
+		self.values = {"Ace" : 11, "2" : 2, "3" : 3, "4" : 4, "5" : 5, "6" : 6, "7" : 7, "8" : 8, "9" : 9, "10" : 10, "King" : 10, "Queen" : 10, "Jack" : 10}
 		self.wholeDeck = self.createNewDeck(self.suits, self.values)
 
 
