@@ -4,24 +4,34 @@ from deck import Card, Deck
 
 class Game:
 
-	def __init__(self):
-		self.deck = []
-		self.players = []
+	def __init__(self, deck, players):
+		self.deck = deck
+		self.players = players
 
-	def intro():
-		print("Welcome to blackjack. Please enter your name.")
-		playerName = input()
-		player1 = Player(playerName, [])
-		print(player1.getName())
+	def shuffleDeck(self, deck):
+		random.shuffle(deck.wholeDeck)
+		for card in deck.wholeDeck:
+			print (str(card.value) + "of" + card.suit)
 
-
-	def startNewGame(self):
+	def newDeck(self):
 		self.deck = Deck()
 
-	def shuffleDeck(deck):
-		random.shuffle(deck)
+	def intro(self):
+		print("Welcome to blackjack. How many players? (1-6)")
+		numOfPlayers = input()
+		if(int(numOfPlayers) in (1, 2, 3, 4, 5, 6)):
+			for i in range(1, (int(numOfPlayers) + 1)):
+				print("Player " + str(i) + ", please enter your name.")
+				playerName = input()
+				self.players.append(Player(playerName, []))
+
+		else:
+			print("Invalid input.")
+			self.intro()
+	
 
 
-
-
-Game.intro()
+thisGame = Game([], [])
+thisGame.intro()
+thisGame.newDeck()
+thisGame.shuffleDeck(thisGame.deck)

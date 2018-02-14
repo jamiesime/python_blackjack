@@ -5,10 +5,10 @@ from game import Game
 class TestGame(unittest.TestCase):
 
 	def setUp(self):
-		self.game = Game()
+		self.game = Game([], [])
 
 	def testHasFullDeck(self):
-		self.game.startNewGame()
+		self.game.newDeck()
 		self.assertTrue(len(self.game.deck.wholeDeck) == 52)
 
 
