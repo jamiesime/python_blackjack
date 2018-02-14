@@ -9,20 +9,10 @@ class Game:
 		self.deck = deck
 		self.players = players
 
-	def shuffleDeck(self, deck):
-		print("Shuffling deck...")
-		time.sleep(1)
-		print("...")
-		time.sleep(1)
-		random.shuffle(deck.wholeDeck)
-		# for card in deck.wholeDeck:
-		# 	print (str(card.value) + "of" + card.suit)
-
-	def newDeck(self):
-		self.deck = Deck()
-
+	# initial display and takes number of players to play game
 	def intro(self):
-		print("W E L C O M E    T O     B L A C K J A C K")
+		print("")
+		print("S I M P L E   B L A C K J A C K")
 		print("")	
 		print("How many players? (1-6)")
 		try:
@@ -40,7 +30,20 @@ class Game:
 			print("Not a number!")
 			self.intro()
 
+	def newDeck(self):
+		self.deck = Deck()
 
+	# randomises deck, with short wait implemented for comprehensibility
+	def shuffleDeck(self, deck):
+		print("Shuffling deck...")
+		time.sleep(1)
+		print("...")
+		time.sleep(1)
+		random.shuffle(deck.wholeDeck)
+		# for card in deck.wholeDeck:
+		# 	print (str(card.value) + "of" + card.suit)
+
+	# loops through players list and pops off first two cards in randomised deck, adding to each player's card list
 	def initialDeal(self):
 		print("Initial hands dealt!")
 		time.sleep(1)
@@ -50,36 +53,27 @@ class Game:
 			player.cards.append(firstCard)
 			player.cards.append(secondCard)
 
-	def playerHit(self, player):
-		nextCard = self.deck.wholeDeck.pop(0)
-		player.cards.append(nextCard)
-		print(player.name + " drew a " + str(nextCard.value) + " of " + nextCard.suit)
-
-	def checkForBust(self, player):
-		handTotal = 0
-		for card in player.cards:
-				# casts card value to list to allow access of index 0
-				# the list will only have one entry
-				cardVal = list(card.value.values())
-				handTotal += int(cardVal[0])
-		print("Hand value: " + str(handTotal))
-		if handTotal > 21:
-			return True
-		return False
-
+	# displays current hand information, determines if player is bust, and if not, continues on to turnOptions
 	def currentTurn(self, currentPlayer):
 		thisPlayer = self.players[currentPlayer]
 		print("<>------------- " + thisPlayer.name + "'s turn! --------------<>")
-		print("Your hand is: ")
-		for card in thisPlayer.cards:
-			cardName = list(card.value.keys())
-			print(str(cardName[0]) + " of " + card.suit)
+		self.displayHand(thisPlayer)
 		bust = self.checkForBust(thisPlayer)
 		if bust == True:
-			print("You've gone bust! You're out!")
-			self.players.pop(currentPlayer)
+			time.sleep(1)
+			print(thisPlayer.name + " has gone bust! Out of the round!")
+			# self.players.pop(currentPlayer)
+			time.sleep(1)
 		else:
 			self.turnOptions(currentPlayer)
+
+	def displayHand(self, thisPlayer):
+		print("Your hand is: ")
+		for card in thisPlayer.cards:
+			# casts card keys dict to list to allow access of index 0
+			# this allows access to the name of the card, rather than an int value
+			cardName = list(card.value.keys())
+			print(str(cardName[0]) + " of " + card.suit)
 
 
 	def turnOptions(self, currentPlayer):
@@ -90,11 +84,11 @@ class Game:
 			choice = int(input())
 			if choice == 1:
 				print(thisPlayer.name + " will stand!")
+				return
 			elif choice == 2:
 				print(thisPlayer.name + " takes another card!")
 				self.playerHit(thisPlayer)
 				self.currentTurn(currentPlayer)
-				self.turnOptions(currentPlayer)
 			else:
 				print("That's not an option!")
 				self.turnOptions(currentPlayer)
@@ -102,6 +96,26 @@ class Game:
 			print("That's not an option!")
 			self.turnOptions(currentPlayer)
 
+	# adds a card to given players card list
+	def playerHit(self, player):
+		nextCard = self.deck.wholeDeck.pop(0)
+		player.cards.append(nextCard)
+		cardValue = list(nextCard.value.values())
+		print(player.name + " drew a " + str(cardValue[0]) + " of " + nextCard.suit)
+		time.sleep(1)
+
+	# determines total value of given players card list and returns true or false depending on if over 21 
+	def checkForBust(self, player):
+		handTotal = 0
+		for card in player.cards:
+				# casts card values dict to list to allow access of index 0
+				# the list/values will only ever have one entry
+				cardVal = list(card.value.values())
+				handTotal += int(cardVal[0])
+		print("Hand value: " + str(handTotal))
+		if handTotal > 21:
+			return True
+		return False
 
 	
 
