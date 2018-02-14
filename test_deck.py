@@ -6,8 +6,11 @@ class TestDeck(unittest.TestCase):
 	def setUp(self):
 		self.deck = Deck()
 
-	def testGetSuits(self):
+	def testGetFourSuits(self):
 		self.assertTrue(len(self.deck.getSuits()) == 4)
+
+	def testDeckLength(self):
+		self.assertTrue(self.deck.getDeckLength() == 52)
 
 
 def main():

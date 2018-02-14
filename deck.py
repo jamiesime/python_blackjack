@@ -13,6 +13,8 @@ class Card:
 
 class Deck:
 
+
+	# on init, add 52 Cards to wholeDeck looping through each suit, and each value
 	def createNewDeck(self, suits, values):
 		thisDeck = []
 		for suit in suits:
@@ -30,12 +32,8 @@ class Deck:
 	def getSuits(self):
 		return self.suits
 
+	def getDeckLength(self):
+		return len(self.wholeDeck)
+
 	def getDeck(self):
-		for card in self.wholeDeck:
-			print (str(card.value) + " of " + card.suit)
-		print(str(len(self.wholeDeck)))
 		return self.wholeDeck
-
-
-newDeck = Deck()
-newDeck.getDeck()
