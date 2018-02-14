@@ -9,6 +9,9 @@ class PlayerTests(unittest.TestCase):
 	def testName(self):
 		self.assertTrue(self.player.getName() == "Bramble")
 
+	def testCards(self):
+		self.assertTrue(self.player.getCards() == "none")
+
 
 
 # def IsOdd(n):
