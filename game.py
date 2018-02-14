@@ -1,4 +1,5 @@
 import random
+import time
 from player import Player
 from deck import Card, Deck
 
@@ -10,6 +11,9 @@ class Game:
 
 	def shuffleDeck(self, deck):
 		print("Shuffling deck...")
+		time.sleep(1)
+		print("...")
+		time.sleep(1)
 		random.shuffle(deck.wholeDeck)
 		# for card in deck.wholeDeck:
 		# 	print (str(card.value) + "of" + card.suit)
@@ -18,7 +22,9 @@ class Game:
 		self.deck = Deck()
 
 	def intro(self):
-		print("Welcome to blackjack. How many players? (1-6)")
+		print("W E L C O M E    T O     B L A C K J A C K")
+		print("")	
+		print("How many players? (1-6)")
 		try:
 			numOfPlayers = int(input())
 			if(numOfPlayers in (1, 2, 3, 4, 5, 6)):
@@ -36,19 +42,47 @@ class Game:
 
 
 	def initialDeal(self):
-		print("Dealing initial hands!")
+		print("Initial hands dealt!")
+		time.sleep(1)
 		for player in self.players:
 			firstCard = self.deck.wholeDeck.pop(0)
 			secondCard = self.deck.wholeDeck.pop(0)
 			player.cards.append(firstCard)
 			player.cards.append(secondCard)
 
-	def playerTurn(self, currentPlayer):
+	def playerHit(self, player):
+		nextCard = self.deck.wholeDeck.pop(0)
+		player.cards.append(nextCard)
+		print(player.name + " drew a " + str(nextCard.value) + " of " + nextCard.suit)
+
+
+	def currentTurnInfo(self, currentPlayer):
 		thisPlayer = self.players[currentPlayer]
-		print(thisPlayer.name + "'s turn!")
+		print("<>------------- " + thisPlayer.name + "'s turn! --------------<>")
 		print("Your hand is: ")
 		for card in thisPlayer.cards:
 			print(str(card.value) + " of " + card.suit)
+
+
+	def currentTurnOptions(self, currentPlayer):
+		thisPlayer = self.players[currentPlayer]
+		print("Press 1 to Stand")
+		print("Press 2 to Hit")
+		try:
+			choice = int(input())
+			if choice == 1:
+				print(thisPlayer.name + " will stand!")
+			elif choice == 2:
+				print(thisPlayer.name + " takes another card!")
+				self.playerHit(thisPlayer)
+				self.currentTurnInfo(currentPlayer)
+				self.currentTurnOptions(currentPlayer)
+			else:
+				print("That's not an option!")
+				self.currentTurnOptions(currentPlayer)
+		except ValueError:
+			print("That's not an option!")
+			self.currentTurnOptions(currentPlayer)
 
 
 	
@@ -65,7 +99,8 @@ currentPlayer = 0
 
 # GAME LOOPS UNTIL END STATE
 while (gameOver == False):
-	thisGame.playerTurn(currentPlayer)
+	thisGame.currentTurnInfo(currentPlayer)
+	thisGame.currentTurnOptions(currentPlayer)
 	if(currentPlayer < len(thisGame.players) - 1):
 		currentPlayer += 1
 	else:
