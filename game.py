@@ -9,9 +9,10 @@ class Game:
 		self.players = players
 
 	def shuffleDeck(self, deck):
+		print("Shuffling deck...")
 		random.shuffle(deck.wholeDeck)
-		for card in deck.wholeDeck:
-			print (str(card.value) + "of" + card.suit)
+		# for card in deck.wholeDeck:
+		# 	print (str(card.value) + "of" + card.suit)
 
 	def newDeck(self):
 		self.deck = Deck()
@@ -33,23 +34,41 @@ class Game:
 			print("Not a number!")
 			self.intro()
 
+
 	def initialDeal(self):
 		print("Dealing initial hands!")
 		for player in self.players:
 			firstCard = self.deck.wholeDeck.pop(0)
-			secondCard = self.deck.wholeDeck.pop(1)
+			secondCard = self.deck.wholeDeck.pop(0)
 			player.cards.append(firstCard)
 			player.cards.append(secondCard)
-		print("These are player 1's cards: ")
-		print(str(self.players[0].cards[0].suit))
-		print(str(self.players[0].cards[0].value))
+
+	def playerTurn(self, currentPlayer):
+		thisPlayer = self.players[currentPlayer]
+		print(thisPlayer.name + "'s turn!")
+		print("Your hand is: ")
+		for card in thisPlayer.cards:
+			print(str(card.value) + " of " + card.suit)
 
 
 	
 
 
+# START OF GAME
+gameOver = False
 thisGame = Game([], [])
 thisGame.intro()
 thisGame.newDeck()
 thisGame.shuffleDeck(thisGame.deck)
 thisGame.initialDeal()
+currentPlayer = 0
+
+# GAME LOOPS UNTIL END STATE
+while (gameOver == False):
+	thisGame.playerTurn(currentPlayer)
+	if(currentPlayer < len(thisGame.players) - 1):
+		currentPlayer += 1
+	else:
+		gameOver = True;
+
+# RESTART OPTION
