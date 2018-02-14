@@ -32,6 +32,19 @@ class Game:
 		except ValueError:
 			print("Not a number!")
 			self.intro()
+
+	def initialDeal(self):
+		print("Dealing initial hands!")
+		for player in self.players:
+			firstCard = self.deck.wholeDeck.pop(0)
+			secondCard = self.deck.wholeDeck.pop(1)
+			player.cards.append(firstCard)
+			player.cards.append(secondCard)
+		print("These are player 1's cards: ")
+		print(str(self.players[0].cards[0].suit))
+		print(str(self.players[0].cards[0].value))
+
+
 	
 
 
@@ -39,3 +52,4 @@ thisGame = Game([], [])
 thisGame.intro()
 thisGame.newDeck()
 thisGame.shuffleDeck(thisGame.deck)
+thisGame.initialDeal()
