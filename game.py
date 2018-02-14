@@ -18,15 +18,19 @@ class Game:
 
 	def intro(self):
 		print("Welcome to blackjack. How many players? (1-6)")
-		numOfPlayers = input()
-		if(int(numOfPlayers) in (1, 2, 3, 4, 5, 6)):
-			for i in range(1, (int(numOfPlayers) + 1)):
-				print("Player " + str(i) + ", please enter your name.")
-				playerName = input()
-				self.players.append(Player(playerName, []))
+		try:
+			numOfPlayers = int(input())
+			if(numOfPlayers in (1, 2, 3, 4, 5, 6)):
+				for i in range(1, (int(numOfPlayers) + 1)):
+					print("Player " + str(i) + ", please enter your name.")
+					playerName = input()
+					self.players.append(Player(playerName, []))
 
-		else:
-			print("Invalid input.")
+			else:
+				print("Out of range!")
+				self.intro()
+		except ValueError:
+			print("Not a number!")
 			self.intro()
 	
 
