@@ -1,3 +1,7 @@
+# This is the main file from a python package which emulates a simplified version of Blackjack
+# The Game class contains all of the game logic, and then a game is instantiated and it's functions are called.
+# Full repo available at: https://github.com/jamiesime/python_blackjack
+
 import random
 import time
 from player import Player
@@ -58,11 +62,15 @@ class Game:
 		thisPlayer = self.players[currentPlayer]
 		print("<>------------- " + thisPlayer.name + "'s turn! --------------<>")
 		self.displayHand(thisPlayer)
-		bust = self.checkForBust(thisPlayer)
-		if bust == True:
+		handTotal = self.getHandTotal(thisPlayer)
+		if handTotal > 21:
 			time.sleep(1)
-			print(thisPlayer.name + " has gone bust! Out of the round!")
-			# self.players.pop(currentPlayer)
+			hasAce = self.checkForAce(thisPlayer.cards)
+			if hasAce == False:
+				print(thisPlayer.name + " has gone bust! Out of the round!")
+			else:
+				handTotal -= 10
+				self.turnOptions(currentPlayer)
 			time.sleep(1)
 		else:
 			self.turnOptions(currentPlayer)
@@ -76,6 +84,7 @@ class Game:
 			print(str(cardName[0]) + " of " + card.suit)
 
 
+	# gets player input and calls functions depending on input
 	def turnOptions(self, currentPlayer):
 		thisPlayer = self.players[currentPlayer]
 		print("Press 1 to Stand")
@@ -104,24 +113,61 @@ class Game:
 		print(player.name + " drew a " + str(cardValue[0]) + " of " + nextCard.suit)
 		time.sleep(1)
 
-	# determines total value of given players card list and returns true or false depending on if over 21 
-	def checkForBust(self, player):
+	# determines total value of given players card list and returns value
+	def getHandTotal(self, player):
 		handTotal = 0
 		for card in player.cards:
-				# casts card values dict to list to allow access of index 0
-				# the list/values will only ever have one entry
-				cardVal = list(card.value.values())
-				handTotal += int(cardVal[0])
-		print("Hand value: " + str(handTotal))
-		if handTotal > 21:
-			return True
+			# casts card values dict to list to allow access of index 0
+			# the list/values will only ever have one entry
+			cardVal = list(card.value.values())
+			handTotal += int(cardVal[0])
+		return handTotal
+
+	def checkForAce(self, cards):
+		for card in cards:
+			if card.value == "Ace":
+				return True
 		return False
+
+
+	# loops through each players score, displays it, and then calls declareWinner
+	def displayResults(self, players):
+		playerScores = {}
+		for player in players:
+			handTotal = self.getHandTotal(player)
+			if(handTotal < 22):
+				playerScores[player.name] = handTotal
+		print("<> - - - - - RESULTS - - - - - <>")
+		for result in playerScores:
+			print (result + "'s hand value : " + str(playerScores[result]))
+		self.declareWinner(playerScores)
+
+
+	# finds the maximum value in playerScores dict and prints its key with win message
+	# if the max value is found in playerScores more than once, a draw is announced
+	def declareWinner(self, playerScores):
+		winner = max(playerScores, key=playerScores.get)
+		winnerList = []
+		for key in playerScores.keys():
+			if playerScores[key] == max(playerScores.values()):
+				winnerList.append(key)
+		print(winnerList)
+		time.sleep(1)
+		if(len(winnerList) > 1):
+			print("It's a draw!")
+			print("High hands held by:")
+			for eachwinner in winnerList:
+				print(eachwinner)
+		else:
+			print("")
+			print("The winner is : " + winner)
+			print("Congratulations!")
 
 	
 
 
 # START OF GAME
-gameOver = False
+roundOver = False
 thisGame = Game([], [])
 thisGame.intro()
 thisGame.newDeck()
@@ -130,11 +176,12 @@ thisGame.initialDeal()
 currentPlayer = 0
 
 # GAME LOOPS UNTIL END STATE
-while (gameOver == False):
+while (roundOver == False):
 	thisGame.currentTurn(currentPlayer)
 	if(currentPlayer < len(thisGame.players) - 1):
 		currentPlayer += 1
 	else:
-		gameOver = True;
+		roundOver = True;
+thisGame.displayResults(thisGame.players)
 
 # RESTART OPTION

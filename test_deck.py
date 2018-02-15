@@ -17,6 +17,10 @@ class TestDeck(unittest.TestCase):
 			print(card.value.keys())
 			print(card.value.values())
 
+	def checkForAce(self):
+		aceCard = Card("Spades", {"Ace" : 11})
+		assertEqual(aceCard.value, "Ace")
+
 
 def main():
 	unittest.main()
