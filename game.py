@@ -125,7 +125,8 @@ class Game:
 
 	def checkForAce(self, cards):
 		for card in cards:
-			if card.value == "Ace":
+			name = list(card.value.keys())[0]
+			if name == "Ace":
 				return True
 		return False
 
