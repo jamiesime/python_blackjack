@@ -70,7 +70,10 @@ class Game:
 				print(thisPlayer.name + " has gone bust! Out of the round!")
 			else:
 				handTotal -= 10
-				self.turnOptions(currentPlayer)
+				if(handTotal < 22):
+					self.turnOptions(currentPlayer)
+				else:
+					print(thisPlayer.name + " has gone bust! Out of the round!")
 			time.sleep(1)
 		else:
 			self.turnOptions(currentPlayer)
@@ -127,6 +130,7 @@ class Game:
 		for card in cards:
 			name = list(card.value.keys())[0]
 			if name == "Ace":
+				print("Ace went low!")
 				return True
 		return False
 
@@ -138,6 +142,12 @@ class Game:
 			handTotal = self.getHandTotal(player)
 			if(handTotal < 22):
 				playerScores[player.name] = handTotal
+			else:
+				hasAce = self.checkForAce(player.cards)
+				if hasAce == True:
+					handTotal -= 10
+					if handTotal < 22:
+						playerScores[player.name] = handTotal
 		print("<> - - - - - RESULTS - - - - - <>")
 		for result in playerScores:
 			print (result + "'s hand value : " + str(playerScores[result]))
